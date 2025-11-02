@@ -1,27 +1,27 @@
 {
   "expo": {
-    "name": "NewSuperXJPlayer",
-    "slug": "NewSuperXJPlayer",
+    "name": "newsuperxjplayer",
+    "slug": "newsuperxjplayer",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "default", 
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "userInterfaceStyle": "dark", 
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash-icon.png", 
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#121212"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+        "backgroundColor": "#121212"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
