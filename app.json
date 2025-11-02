@@ -1,13 +1,14 @@
+// app.json (Complet)
 {
   "expo": {
     "name": "newsuperxjplayer",
     "slug": "newsuperxjplayer",
     "version": "1.0.0",
-    "orientation": "default", 
+    "orientation": "default", // <-- AUTORISE LA ROTATION
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "dark", 
+    "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash-icon.png", 
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#121212"
     },

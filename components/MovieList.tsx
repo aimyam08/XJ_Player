@@ -1,4 +1,4 @@
-// components/ChannelList.tsx (Complet)
+// components/MovieList.tsx (Complet)
 
 import React from 'react';
 import { 
@@ -7,63 +7,57 @@ import {
 } from 'react-native';
 import { useIPTV } from '../context/IPTVContext';
 import { useNavigation } from '@react-navigation/native';
-import { Channel } from '../types';
+import { Movie } from '../types';
 
 const defaultLogo = require('../assets/icon.png'); 
 
-const ChannelList = () => {
-  const { channels, playStream, isLoading, error } = useIPTV();
+const MovieList = () => {
+  const { movies, playStream, isLoading } = useIPTV();
   const navigation = useNavigation();
 
-  const handleChannelPress = (channel: Channel) => {
-    console.log('CLIC SUR CHAÎNE:', channel.name); 
-    playStream({ url: channel.url, id: channel.id });
+  const handleMoviePress = (movie: Movie) => {
+    console.log('CLIC SUR FILM:', movie.name); 
+    playStream({ url: movie.streamUrl, id: movie.id });
     navigation.navigate('Player');
   };
 
   // --- TRANSFORMATION DES DONNÉES ---
-  // On transforme la liste plate [a, b, c] en une liste groupée
-  // [{ title: "Groupe 1", data: [a, b] }, { title: "Groupe 2", data: [c] }]
   const groupedData = React.useMemo(() => {
-    if (channels.length === 0) return [];
+    if (movies.length === 0) return [];
     
-    // 1. On crée un objet pour regrouper (ex: { "France HD": [...], "Films": [...] })
-    const groups = channels.reduce((acc, channel) => {
-      const groupTitle = channel.group || 'Inconnu'; // Utilise 'Inconnu' si pas de groupe
+    const groups = movies.reduce((acc, movie) => {
+      const groupTitle = movie.group || 'Inconnu';
       if (!acc[groupTitle]) {
         acc[groupTitle] = [];
       }
-      acc[groupTitle].push(channel);
+      acc[groupTitle].push(movie);
       return acc;
-    }, {} as Record<string, Channel[]>);
+    }, {} as Record<string, Movie[]>);
 
-    // 2. On transforme l'objet en tableau pour la SectionList
-    return Object.keys(groups).sort().map(title => ({ // .sort() pour trier par ordre alphabétique
+    return Object.keys(groups).sort().map(title => ({
       title: title,
       data: groups[title]
     }));
-  }, [channels]);
+  }, [movies]);
   // --- FIN DE LA TRANSFORMATION ---
 
-  // Rendu d'un item (une chaîne)
-  const renderItem = ({ item }: { item: Channel }) => (
+  const renderItem = ({ item }: { item: Movie }) => (
     <TouchableOpacity 
-      style={styles.channelItem} 
-      onPress={() => handleChannelPress(item)}
+      style={styles.item} 
+      onPress={() => handleMoviePress(item)}
     >
       <Image 
         style={styles.logo}
-        source={item.logo ? { uri: item.logo } : defaultLogo}
+        source={item.cover ? { uri: item.cover } : defaultLogo}
         defaultSource={defaultLogo}
         resizeMode="contain"
       />
-      <View style={styles.channelInfo}>
-        <Text style={styles.channelName}>{item.name}</Text>
+      <View style={styles.info}>
+        <Text style={styles.name}>{item.name}</Text>
       </View>
     </TouchableOpacity>
   );
 
-  // Rendu de l'en-tête de section (ex: "France HD")
   const renderSectionHeader = ({ section: { title } }: { section: { title: string } }) => (
     <Text style={styles.header}>{title}</Text>
   );
@@ -75,33 +69,24 @@ const ChannelList = () => {
       </View>
     );
   }
-  
-  if (error) {
-    return (
-      <View style={[styles.container, styles.centered]}>
-        <Text style={styles.errorText}>Erreur: {error}</Text>
-      </View>
-    );
-  }
 
-  if (channels.length === 0) {
+  if (movies.length === 0) {
     return (
       <View style={[styles.container, styles.centered]}>
-        <Text style={styles.emptyText}>Aucune chaîne trouvée dans ce profil.</Text>
+        <Text style={styles.emptyText}>Aucun film trouvé dans ce profil.</Text>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      {/* On remplace FlatList par SectionList */}
       <SectionList
         sections={groupedData}
         renderItem={renderItem}
         renderSectionHeader={renderSectionHeader}
-        keyExtractor={(item) => item.id + item.url}
+        keyExtractor={(item) => item.id + item.streamUrl}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        stickySectionHeadersEnabled={true} // En-têtes collants
+        stickySectionHeadersEnabled={true}
       />
     </View>
   );
@@ -113,7 +98,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#121212',
   },
-  // Style pour l'en-tête (ex: "France HD")
   header: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -125,29 +109,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  errorText: {
-    color: '#FF3B30',
-  },
   emptyText: {
     color: '#888',
     textAlign: 'center',
   },
-  channelItem: {
+  item: {
     flexDirection: 'row',
     padding: 10,
     alignItems: 'center',
   },
   logo: {
     width: 50,
-    height: 50,
+    height: 75,
     marginRight: 15,
     backgroundColor: '#333',
-    borderRadius: 8,
+    borderRadius: 4,
   },
-  channelInfo: {
+  info: {
     flex: 1,
   },
-  channelName: {
+  name: {
     color: '#FFF',
     fontSize: 16,
   },
@@ -158,4 +139,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChannelList;
+export default MovieList;

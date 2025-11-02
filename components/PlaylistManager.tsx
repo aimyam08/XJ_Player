@@ -1,3 +1,5 @@
+// components/PlaylistManager.tsx (Complet)
+
 import React, { useState } from 'react';
 import { 
   View, 
@@ -14,10 +16,10 @@ import { useIPTV } from '../context/IPTVContext';
 import { IPTVProfile, M3UProfile } from '../types';
 
 const PlaylistManager = () => {
-  
   const { 
     addProfile, 
-    removeProfile, 
+    removeProfile,
+    editProfile, // <-- Nouvelle fonction du contexte
     profiles, 
     loadProfile, 
     isLoading, 
@@ -25,11 +27,32 @@ const PlaylistManager = () => {
     currentProfile 
   } = useIPTV();
   
+  // États pour le formulaire
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
 
-  const handleAddPlaylist = () => {
-    if (name.trim() && url.trim()) {
+  // --- NOUVEL ÉTAT POUR L'ÉDITION ---
+  const [editingProfile, setEditingProfile] = useState<IPTVProfile | null>(null);
+
+  // Gère le bouton principal (Ajouter ou Sauvegarder)
+  const handleSubmit = () => {
+    if (!name.trim() || !url.trim()) {
+      Alert.alert("Erreur", "Veuillez remplir le nom et l'URL");
+      return;
+    }
+
+    if (editingProfile) {
+      // --- MODE ÉDITION ---
+      // (Nous ne gérons que M3U pour l'instant)
+      const updatedProfile: M3UProfile = {
+        ...(editingProfile as M3UProfile),
+        name: name,
+        url: url,
+      };
+      editProfile(updatedProfile);
+      Alert.alert("Succès", `Profil "${name}" mis à jour.`);
+    } else {
+      // --- MODE AJOUT ---
       const newM3UProfile: M3UProfile = {
         id: Date.now().toString(),
         name,
@@ -37,11 +60,29 @@ const PlaylistManager = () => {
         url,
       };
       addProfile(newM3UProfile);
-      setName('');
-      setUrl('');
-    } else {
-      Alert.alert("Erreur", "Veuillez remplir le nom et l'URL");
     }
+    
+    // Réinitialiser le formulaire
+    cancelEdit();
+  };
+  
+  // Fonction pour charger le formulaire d'édition
+  const startEditing = (profile: IPTVProfile) => {
+    // On ne peut éditer que des M3U pour l'instant
+    if (profile.type === 'm3u') {
+      setEditingProfile(profile);
+      setName(profile.name);
+      setUrl(profile.url);
+    } else {
+      Alert.alert("Non supporté", "L'édition des profils Xtream/Stalker n'est pas encore implémentée.");
+    }
+  };
+
+  // Fonction pour annuler l'édition
+  const cancelEdit = () => {
+    setEditingProfile(null);
+    setName('');
+    setUrl('');
   };
 
   const handleLoadProfile = (profile: IPTVProfile) => {
@@ -65,6 +106,7 @@ const PlaylistManager = () => {
     );
   };
 
+  // Rendu de chaque item de la liste
   const renderProfileItem = ({ item }: { item: IPTVProfile }) => (
     <View style={styles.profileItem}>
       <View style={styles.profileInfo}>
@@ -79,6 +121,15 @@ const PlaylistManager = () => {
         >
           <Text style={styles.actionButtonText}>Charger</Text>
         </TouchableOpacity>
+        
+        {/* --- NOUVEAU BOUTON "ÉDITER" --- */}
+        <TouchableOpacity 
+          style={[styles.actionButton, styles.editButton]} 
+          onPress={() => startEditing(item)}
+        >
+          <Text style={styles.actionButtonText}>Éditer</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity 
           style={[styles.actionButton, styles.deleteButton]} 
           onPress={() => handleDeleteProfile(item)}
@@ -91,7 +142,11 @@ const PlaylistManager = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ajouter un Profil M3U</Text>
+      
+      {/* --- FORMULAIRE DYNAMIQUE --- */}
+      <Text style={styles.title}>
+        {editingProfile ? "Modifier le Profil" : "Ajouter un Profil M3U"}
+      </Text>
       <TextInput
         style={styles.input}
         placeholder="Nom du profil (ex: Mon FAI)"
@@ -108,21 +163,32 @@ const PlaylistManager = () => {
         keyboardType="url"
         placeholderTextColor="#888"
       />
-      <Button title="Ajouter et Sauvegarder" onPress={handleAddPlaylist} />
+      <View style={styles.formButtons}>
+        <Button 
+          title={editingProfile ? "Sauvegarder" : "Ajouter"} 
+          onPress={handleSubmit} 
+        />
+        {/* Si on est en mode édition, montrer un bouton "Annuler" */}
+        {editingProfile && (
+          <Button 
+            title="Annuler" 
+            onPress={cancelEdit} 
+            color="#FF3B30"
+          />
+        )}
+      </View>
 
       <View style={styles.divider} />
-
       <Text style={styles.title}>Profils Sauvegardés</Text>
-
+      {/* ... (le reste du composant est identique) ... */}
+      
       {isLoading && !currentProfile && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#007AFF" />
           <Text style={styles.loadingText}>Chargement en cours...</Text>
         </View>
       )}
-
       {error && <Text style={styles.errorText}>Erreur: {error}</Text>}
-
       <FlatList
         data={profiles}
         renderItem={renderProfileItem}
@@ -135,6 +201,7 @@ const PlaylistManager = () => {
   );
 };
 
+// --- STYLES MIS À JOUR ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -157,6 +224,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#222',
     color: '#FFF',
   },
+  formButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 12,
+  },
   divider: {
     height: 1,
     backgroundColor: '#444',
@@ -173,10 +245,12 @@ const styles = StyleSheet.create({
   },
   profileInfo: {
     flex: 1,
+    marginRight: 5,
   },
   profileName: {
     color: '#FFF',
     fontSize: 16,
+    flexShrink: 1, // Permet au texte de se réduire
   },
   profileType: {
     color: '#AAA',
@@ -186,14 +260,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   actionButton: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 10, // Réduit pour plus de place
     paddingVertical: 8,
     borderRadius: 5,
-    marginLeft: 10,
+    marginLeft: 5, // Réduit
     justifyContent: 'center',
   },
   loadButton: {
     backgroundColor: '#007AFF',
+  },
+  editButton: {
+    backgroundColor: '#FF9500', // Orange
   },
   deleteButton: {
     backgroundColor: '#FF3B30',
@@ -201,6 +278,7 @@ const styles = StyleSheet.create({
   actionButtonText: {
     color: '#FFF',
     fontWeight: 'bold',
+    fontSize: 12, // Réduit
   },
   loadingContainer: {
     alignItems: 'center',
